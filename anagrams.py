@@ -1,9 +1,10 @@
 import fileFuncs
 import time
-import sort
+#import linkedlists AS list
 
 #import the dictionary of words
 dictionary = fileFuncs.fetchFileContent( "words.txt" )
+
 
 starttime = time.time()
 
@@ -17,6 +18,12 @@ starttime = time.time()
 
 output = {}
 #precondition: given a dictionary of words, plus a starting word
+
+
+
+
+counts = {}
+
 for word in dictionary:
     #loop invariant: all words so far till "word" has been appended to their "set" of matching anagrams, if none, then they're alone
 
@@ -40,12 +47,23 @@ for word in dictionary:
                 count += 1
 
             count += 1
+
             wordlist.append( word )
             output[compareWord] = [wordlist, count]
+            try:
+                counts[count] = [counts[count], output[compareWord]]
+            except: counts[count] = [output[compareWord]]
+
+
+
             #print( output[compareWord] )
     except:
         output[compareWord] = [[word], 1]
-
+        try:
+            if( counts[1] ):
+                counts[1] = [counts[1], output[compareWord]]
+        except:
+            counts[1] = [output[compareWord]]
 
 #post condition: printed all words that are anagrams
 #lasted
@@ -54,14 +72,24 @@ print("completed in: %g" % (endtime - starttime))
 
 maxkeycount = 0
 maxkey = ""
-for key in output:
+
+
+for key in counts:
+    if( key > 6 ):
+        for l in counts[key][0][0]:
+            print( l )
+       # print( counts[key] )
+#for key in output:
+
+
+
     #print(output[key])
-    if( output[key][1] > maxkeycount ):
-        maxkey = key
-        maxkeycount = output[key][1]
+   # if( output[key][1] > maxkeycount ):
+    #    maxkey = key
+   #     maxkeycount = output[key][1]
        # print( maxkeycount )
 
-print( output[maxkey] )
+#print( output[maxkey] )
 
 
 
