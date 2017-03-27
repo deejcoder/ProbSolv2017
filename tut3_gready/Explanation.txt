@@ -1,0 +1,25 @@
+Aim: maximize the sum of Worth seen on each defending card.
+
+Suppose we have a defending card (where all defending cards are ordered by Worth, as number one priority), and try to find an attacking card that can be beaten by this card.
+
+Two cases:
+1. There is no card (~a) that this defending card can beat (d) therefore the defending card should
+	knock out the highest attacking card.
+2. There is a card (a) that this defending card can beat (d) therefore the defending card lives,
+	and knocks out the highest possible attacking card that it can.
+
+
+The number of high attacking cards that are being knocked out is maximized.
+If that is so and if the highest Worth defending cards are compared first, the Worth is therefore maximized. However if a card of high Worth has low ability, should we not want to waste a card that
+is of low ability to maximize Worth?
+
+This suggests that if there exists a high Worth card that is knocked down, but there also exists
+a card of low Worth and low ability, then the Worth is not maximized.
+
+However the greedy method still offers a decent solution.
+
+
+
+
+
+
