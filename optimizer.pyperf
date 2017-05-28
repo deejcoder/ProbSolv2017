@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ProfilingTarget xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <StandaloneTarget>
+    <PythonInterpreter>
+      <Id>Global|PythonCore|3.2-32</Id>
+    </PythonInterpreter>
+    <WorkingDirectory>C:\Users\Dylan\PycharmProjects\ProbSolv2017\Assignment 2</WorkingDirectory>
+    <Script>C:\Users\Dylan\Downloads\optimizer.py</Script>
+    <Arguments />
+  </StandaloneTarget>
+  <Reports>
+    <Report>
+      <Filename>C:\Users\Dylan\AppData\Local\Temp\optimizer_20170528.vsp</Filename>
+    </Report>
+  </Reports>
+</ProfilingTarget>
