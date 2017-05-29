@@ -3,7 +3,7 @@ from building import *
 # speed test - use "python optimizer.py" to run
 if __name__ == "__main__":
     import timeit
-    test_size = 100 # set to 100 to check time for speed race
+    test_size = 15 # set to 100 to check time for speed race
     t1 = timeit.repeat(stmt="optimizer.max_food(b)", setup="import gc, building, optimizer; b = building.random_building({0}, True); gc.collect()".format(test_size), repeat=3, number=1)
     t2 = timeit.repeat(stmt="optimizer.max_supplies(b)", setup="import gc, building, optimizer; b = building.random_building({0}, False); gc.collect()".format(test_size), repeat=3, number=1)
     # some calculation that takes ~1 sec on my machine
@@ -141,4 +141,101 @@ def max_food_quadrant(quad):
 
 def max_supplies(building):
     """returns the maximum of min(food,water) that can be collected from given building"""
-    return building.size * 5 # dummy implementation - replace
+
+    grid = building.rooms
+    S = [[ [item.food, item.water] for item in row ] for row in grid]
+    lists = split(S)
+    topleft = trans_TL(lists[0])
+    topright = trans_TR(lists[1])
+    bottomleft = trans_BL(lists[2])
+    bottomright = lists[3]
+
+   # tl = max_supplies_quadrant( topleft )
+    #tr = max_supplies_quadrant( topright )
+    #bl = max_supplies_quadrant( bottomleft )
+    br = max_supplies_quadrant( bottomright )
+    best = bestTuple( br )
+    #print( best )
+    print( best )
+    return min( best[0], best[1] )
+
+
+def max_supplies_quadrant(quad):
+    #for i in quad:
+    #    print( i )
+    possibilities = {}
+
+    for row in range( 0, len( quad ) ):
+        for col in range( 0, len( quad ) ):
+            if( row is 0 and col is 0 ):
+                continue
+
+            if( row == 0 ):
+                if( col == 1 ):
+                    # Row 0, Col 1: initial possibility
+                    possibilities[(row,col)] = [
+                        (quad[row][col][0],quad[row][col][1])
+                    ]
+                    continue
+
+                # Add the food and water up along the first row, store as cell's single possibility
+                possibilities[(row,col)] = [
+                    (quad[row][col][0] + quad[row][col - 1][0], quad[row][col][1] + quad[row][col - 1][1])
+                ]
+                continue
+
+
+            if( col == 0 ):
+                if( row == 1 ):
+                    possibilities[(row,col)] = [
+                        (quad[row][col][0],quad[row][col][1])
+                    ]
+                    continue
+
+                # Add the food and water up along the first column, store as cell's single possibility
+                possibilities[(row,col)] = [
+                    (quad[row][col][0] + quad[row - 1][col][0], quad[row][col][1] + quad[row - 1][col][1])
+                ]
+                continue
+
+            else:
+              previous = possibilities[(row, col - 1)]
+              above = possibilities[(row - 1, col)]
+              #print( above )
+
+              tmp = []
+
+              possible_list = previous + above
+          
+              for supplies in possible_list:
+                   add = True
+                   adding = (supplies[0] + quad[row][col][0], supplies[1] + quad[row][col][1] )
+                      
+                   for option in tmp:
+                       if( adding[0] <= option[0] and adding[1] <= option[1] ):
+                           add = False
+                           break
+                       elif( adding[0] >= option[0] and adding[1] >= option[1] ):
+                           tmp.remove( option )
+                   if( add ):
+                       tmp.append( adding )
+              possibilities[(row,col)] = tmp
+              print( quad[row][col], tmp )
+
+    #for f,w in possibilities.items():
+
+       #print("f,w:",f, w)
+   
+
+    return possibilities[(len(quad)-1,(len(quad)-1))]
+    #print("Final square possibilities:", possibilities[(len(quad)-1,(len(quad)-1))])
+def bestTuple( list ):
+    best = (0,0)
+    for i in range( 0, len( list )-1 ):
+        if min( list[i][0], list[i][1] ) > min( list[i+1][0], list[i+1][1] ):
+            cur = list[i]
+        else:
+            cur = list[i+1]
+        if min( cur[0], cur[1] ) > min( best[0], best[1] ):
+                best = cur
+    return best
