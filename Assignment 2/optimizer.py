@@ -3,13 +3,12 @@ from building import *
 # speed test - use "python optimizer.py" to run
 if __name__ == "__main__":
     import timeit
-    test_size = 15 # set to 100 to check time for speed race
+    test_size = 20 # set to 100 to check time for speed race
     t1 = timeit.repeat(stmt="optimizer.max_food(b)", setup="import gc, building, optimizer; b = building.random_building({0}, True); gc.collect()".format(test_size), repeat=3, number=1)
     t2 = timeit.repeat(stmt="optimizer.max_supplies(b)", setup="import gc, building, optimizer; b = building.random_building({0}, False); gc.collect()".format(test_size), repeat=3, number=1)
     # some calculation that takes ~1 sec on my machine
     tref = timeit.repeat(stmt="for i in range(1000000): a=i^2", setup="import gc; gc.collect()", repeat=3, number=19)
     print("max_food(n={0}) = {1} ({3} normalized), max_supplies(n={0}) = {2} ({4} normalized)".format(test_size, min(t1), min(t2), min(t1) / min(tref), min(t2) / min(tref)))
-
 
 def split( grid ):
 	length = len(grid[0])
@@ -150,9 +149,9 @@ def max_supplies(building):
     bottomleft = trans_BL(lists[2])
     bottomright = lists[3]
 
-   # tl = max_supplies_quadrant( topleft )
-    #tr = max_supplies_quadrant( topright )
-    #bl = max_supplies_quadrant( bottomleft )
+    tl = max_supplies_quadrant( topleft )
+    tr = max_supplies_quadrant( topright )
+    bl = max_supplies_quadrant( bottomleft )
     br = max_supplies_quadrant( bottomright )
     best = bestTuple( br )
     #print( best )
@@ -220,7 +219,7 @@ def max_supplies_quadrant(quad):
                    if( add ):
                        tmp.append( adding )
               possibilities[(row,col)] = tmp
-              print( quad[row][col], tmp )
+              #print( quad[row][col], tmp )
 
     #for f,w in possibilities.items():
 
@@ -231,11 +230,7 @@ def max_supplies_quadrant(quad):
     #print("Final square possibilities:", possibilities[(len(quad)-1,(len(quad)-1))])
 def bestTuple( list ):
     best = (0,0)
-    for i in range( 0, len( list )-1 ):
-        if min( list[i][0], list[i][1] ) > min( list[i+1][0], list[i+1][1] ):
-            cur = list[i]
-        else:
-            cur = list[i+1]
-        if min( cur[0], cur[1] ) > min( best[0], best[1] ):
-                best = cur
+    for i in range( 0, len( list ) ):
+        if min( list[i][0], list[i][1] ) > min( best[0], best[1] ):
+            best = list[i]
     return best
