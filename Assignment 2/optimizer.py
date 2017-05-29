@@ -181,7 +181,6 @@ def max_supplies(building):
     poss_bl = max_supplies_quadrant( bl )
     poss_br = max_supplies_quadrant( br )
     best = bestTuple( poss_tl + poss_tr + poss_bl + poss_br  )
-    #print( best )
     print( best )
     return min( best[0], best[1] )
 
@@ -241,7 +240,7 @@ def max_supplies_quadrant(quad):
                        if( adding[0] <= option[0] and adding[1] <= option[1] ):
                            add = False
                            break
-                       elif( adding[0] >= option[0] and adding[1] >= option[1] ):
+                       elif( adding[0] <= option[0] and adding[1] >= option[1] ):
                            tmp.remove( option )
                    if( add ):
                        tmp.append( adding )
