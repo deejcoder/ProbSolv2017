@@ -3,7 +3,7 @@ from building import *
 # speed test - use "python optimizer.py" to run
 if __name__ == "__main__":
     import timeit
-    test_size = 50 # set to 100 to check time for speed race
+    test_size = 100  # set to 100 to check time for speed race
     t1 = timeit.repeat(stmt="optimizer.max_food(b)", setup="import gc, building, optimizer; b = building.random_building({0}, True); gc.collect()".format(test_size), repeat=3, number=1)
     t2 = timeit.repeat(stmt="optimizer.max_supplies(b)", setup="import gc, building, optimizer; b = building.random_building({0}, False); gc.collect()".format(test_size), repeat=3, number=1)
     # some calculation that takes ~1 sec on my machine
@@ -37,6 +37,7 @@ def getQuadrants( grid, size ):
         br.append(grid[i][size:])
 
     return tl, tr, bl, br
+
 
 """
     METHODS: to normalize the quadrant such that
